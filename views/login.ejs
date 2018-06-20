@@ -1,0 +1,24 @@
+<% include layout.ejs %>
+<% var messageAlert = typeof messages !== null ? messages : null %>
+
+<div class="container">
+    
+    <%- messageAlert() %>
+
+    <h2 class="page-header">Login</h2>
+    <p>Please Login with this form</p>
+
+    
+
+    <form method="POST" action="/users/login" class="form-group">
+
+        <label for="username">Username</label>
+        <input class="form-control" name="username" type="text" placeholder="Enter Username"/>
+
+        <label for="Password">Password</label>
+        <input class="form-control" name="password" type="password" placeholder="Enter Password"/>
+
+        <input type="submit" class="btn btn-primary" name="submit" value="Login" />
+        
+    </form>
+</div>

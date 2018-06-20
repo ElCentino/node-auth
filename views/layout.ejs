@@ -1,0 +1,85 @@
+<% var pageTitle = typeof title !== 'undefined' ? title : null %>
+
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <title>Node Authentication <%= pageTitle %></title>
+
+    <style>
+      ul.success li {
+        padding: 15px;
+        margin-bootom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+        list-style-type: none;
+      }
+
+      ul.error li {
+        padding: 15px;
+        margin.bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+        list-style-type: none;
+      }
+
+    </style>
+  </head>
+  <body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">NodeAuth</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto nav-pills">
+      <li class="nav-item">
+        <% var activeClass = pageTitle == "Members" ? 'active' : '' %>
+        <a class="nav-link <%= activeClass %>" role="button" href="/">Members</a>
+      </li>
+
+      <% if(typeof user === 'undefined') { %>
+        <li class="nav-item">
+          <% var activeClass = pageTitle == "Register" ? 'active' : '' %>
+          <a class="nav-link text-default <%= activeClass %>" href="/users/register">Register</a>
+        </li>
+        <li class="nav-item">
+          <% var activeClass = pageTitle == "Login" ? 'active' : '' %>
+          <a class="nav-link <%= activeClass %>" href="/users/login">Login</a>
+        </li>
+      </ul>
+
+    <% } %>
+
+    <% if(typeof user !== 'undefined') { %>
+        
+      <ul class="nav nav-bar nav-bar-right">
+        <li class="nav-item text-info">
+          <a class="nav-link disabled" href="/users/logout">Logout</a>
+        </li>
+      </ul>
+    <% } %>
+    
+  </div>
+</nav>
+
+    <style>
+        .container {
+          padding: 100px;
+        }
+    </style>

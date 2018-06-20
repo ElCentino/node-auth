@@ -1,0 +1,39 @@
+<% include layout.ejs %>
+
+<div class="container">
+
+    <% if(typeof errors !== 'undefined') { %>
+        <% for(error of errors) { %>
+            <div class="alert alert-danger">
+                <%= error.msg %>
+            </div>
+        <% } %>
+    <% } %>
+
+    <h2 class="page-header">Register</h2>
+    <p>Please Register with this form</p>
+
+    <form method="POST" action="/users/register" enctype="multipart/form-data" class="form-group">
+
+        <label for="name">Name</label>
+        <input class="form-control" name="name" type="text" placeholder="Enter Name"/>
+
+        <label for="email">Email</label>
+        <input class="form-control" name="email" type="email" placeholder="Enter Email"/>
+        
+        <label for="username">Username</label>
+        <input class="form-control" name="username" type="text" placeholder="Enter Username"/>
+
+        <label for="Password">Password</label>
+        <input class="form-control" name="password" type="password" placeholder="Enter Password"/>
+
+        <label for="Password">Confirm Password</label>
+        <input class="form-control" name="password2" type="password" placeholder="Confirm Password"/>
+
+        <label for="PI">Profile Image</label>
+        <input class="form-control" name="profileImage" type="file"/>
+
+        <input type="submit" class="btn btn-primary" name="submit" value="Register" />
+        
+    </form>
+</div>

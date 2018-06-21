@@ -15,7 +15,7 @@ var storage = multer.diskStorage({
   },
 
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '.jpg');
+    cb(null, Date.now() + file.mimetype);
   }
 });
 
@@ -25,7 +25,17 @@ router.get('/', (req, res) => {
   res.send('responded');
 });
 
-router.get('/profile/:username', function(req, res, next) {
+function ensureAuthenticated(req, res, next) {
+
+  if(req.isAuthenticated()) {
+
+    return next();
+  } else {
+    res.status(500).end("Bad Route");
+  }
+}
+
+router.get('/profile/:username', ensureAuthenticated, function(req, res, next) {
   
   const { username } = req.params;
 
@@ -88,6 +98,8 @@ passport.use(new LocalStrategy(function(username, password, done) {
 }));
 
 router.post('/register', upload.single('profileImage'), function(req, res, next) {
+
+  let globalerrors = [];
   
   const { name, email, password, username, password2 } = req.body;
 
@@ -107,6 +119,7 @@ router.post('/register', upload.single('profileImage'), function(req, res, next)
   req.checkBody('email', 'Email Must be valid email').isEmail();
   req.checkBody('username', 'Username field is required').notEmpty();
   req.checkBody('password', 'Password field is required').notEmpty();
+  req.checkBody('password', 'Password should be atleast 8 characters long').len(5, 20);
   req.checkBody('password2', 'Passwords do not match').equals(password);
 
   var errors = req.validationErrors();
@@ -116,20 +129,49 @@ router.post('/register', upload.single('profileImage'), function(req, res, next)
       errors
     });
   } else {
-      var newUser = new User({ name, email, username, password, profileImage });
 
-      User.createUser(newUser, function(err, user) {
+    User.getUserByUsername(email, function(err, emailUser) {
 
-        if(err) throw err;
+      User.getUserByUsername(username, function(err, user) {
 
-      });
+        if(user) {
 
-      req.flash('success', 'You are now registered and can login');
+          if(user.username.toLowerCase() === username.toLowerCase()) {
 
-      res.location('/');
-      res.redirect('/');
+            globalerrors.push({msg : 'User Already Exists'})
+          }
+
+          if(emailUser && emailUser.email.toLowerCase() === email.toLowerCase()) {
+
+            globalerrors.push({msg : 'Email is in use'});
+          }
+
+          console.log(emailUser + " " + email);
+
+          if(globalerrors.length > 0) {
+
+            res.render('register', {
+              errors : globalerrors
+            });
+          }
+        } else {
+
+          var newUser = new User({ name, email, username, password, profileImage });
+
+          User.createUser(newUser, function(err, user) {
+    
+            if(err) throw err;
+
+            req.flash('success', 'You are now registered and can login');
+    
+            res.location('/');
+            res.redirect('/');
+    
+          });
+        }
+     });
+    });
   }
-
 });
 
 router.get('/logout', function(req, res) {

@@ -53,7 +53,7 @@
         <a class="nav-link <%= activeClass %>" role="button" href="/">Members</a>
       </li>
 
-      <% if(typeof user === 'undefined') { %>
+      <% if(typeof user === "undefined" || null) { %>
         <li class="nav-item">
           <% var activeClass = pageTitle == "Register" ? 'active' : '' %>
           <a class="nav-link text-default <%= activeClass %>" href="/users/register">Register</a>
@@ -66,7 +66,7 @@
 
     <% } %>
 
-    <% if(typeof user !== 'undefined') { %>
+    <% if(typeof user !== "undefined" || null) { %>
         
       <ul class="nav nav-bar nav-bar-right">
         <li class="nav-item text-info">
